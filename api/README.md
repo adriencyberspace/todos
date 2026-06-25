@@ -1,0 +1,48 @@
+# TodoApi
+
+A local-dev Todo REST API built with .NET 10, EF Core, and SQLite. No external dependencies — `dotnet run` is all you need.
+
+## Setup
+
+```bash
+cd src/TodoApi.Api
+dotnet run
+```
+
+Navigate to `http://localhost:5000/api-doc` for the Scalar interactive docs.
+
+## Endpoints
+
+| Method | Path | Description |
+|--------|------|-------------|
+| `GET` | `/todos` | List todos. Optional: `?completed=true/false`, `?priority=low/medium/high` |
+| `GET` | `/todos/{id}` | Get a single todo |
+| `POST` | `/todos` | Create a todo |
+| `PUT` | `/todos/{id}` | Update a todo |
+| `PATCH` | `/todos/{id}/complete` | Mark a todo complete (idempotent) |
+| `DELETE` | `/todos/{id}` | Delete a todo |
+
+## Tests
+
+```bash
+dotnet test TodoApi.slnx
+```
+
+Six unit tests covering create defaults, complete, idempotent complete, filter by completed, filter by priority, and delete. Each test uses an isolated in-memory EF Core database.
+
+## Architecture decisions
+
+**SQLite over in-memory EF Core for the API** — SQLite persists across restarts. The `todos.db` file is created automatically on first run via `Database.Migrate()` in startup. In-memory EF Core is reserved for tests only.
+
+**GUID IDs** — non-enumerable, safe to expose in URLs without leaking record counts.
+
+**No authentication** — scoped to local development. In production, add JWT bearer auth and lock the CORS policy to the deployed frontend origin.
+
+**No subtasks** — one-level todo items only. A `parentId` relationship is explicitly out of scope.
+
+## Production considerations
+
+- Auth: JWT bearer with a claims-based policy
+- CORS: lock `WithOrigins` to the deployed frontend URL
+- Rate limiting: `AddRateLimiter` with a fixed-window policy
+- Containerization: multi-stage Dockerfile targeting `mcr.microsoft.com/dotnet/aspnet:10.0-alpine`

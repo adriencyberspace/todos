@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(grep -E \"\\\\.\\(cs|csproj|slnx|json|md|yml|yaml|props\\)$\")",
+      "Bash(grep -v '^\\\\$')",
+      "Bash(awk ' *)",
+      "Bash(dotnet build *)",
+      "Read(//usr/local/share/dotnet/**)",
+      "Read(//Users/adrienyoung/.dotnet/**)",
+      "Read(//usr/**)",
+      "Read(//opt/**)",
+      "Read(//Users/adrienyoung/**)"
+    ]
+  }
+}
