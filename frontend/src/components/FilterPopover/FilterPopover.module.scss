@@ -1,0 +1,130 @@
+@use '../../styles/variables' as *;
+
+.container {
+  position: relative;
+}
+
+.trigger {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  color: $text-secondary;
+  transition: color 0.15s, background 0.15s;
+
+  &:hover {
+    color: $text-primary;
+    background: rgba(255, 255, 255, 0.06);
+  }
+}
+
+.dot {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: $rust;
+}
+
+.popover {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  z-index: 100;
+  background: $bg-secondary;
+  border: 1px solid $border;
+  border-radius: 8px;
+  padding: 12px;
+  min-width: 200px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.label {
+  font-size: $text-sm;
+  color: $text-muted;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.option {
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: $text-sm;
+  color: $text-secondary;
+  border: 1px solid $border;
+  transition: all 0.15s;
+
+  &:hover {
+    color: $text-primary;
+    border-color: rgba(255, 255, 255, 0.2);
+  }
+
+  &[data-active='true'] {
+    background: $rust;
+    color: $cream;
+    border-color: $rust;
+  }
+
+  &[data-value='active'][data-active='true'] {
+    background: $white;
+    color: $bg-primary;
+    border-color: $white;
+  }
+
+  &[data-value='completed'][data-active='true'] {
+    background: $green-check;
+    color: $bg-primary;
+    border-color: $green-check;
+  }
+
+  &[data-value='Low'][data-active='true'] {
+    background: $priority-low;
+    color: $bg-primary;
+    border-color: $priority-low;
+  }
+
+  &[data-value='Medium'][data-active='true'] {
+    background: $priority-medium;
+    color: $bg-primary;
+    border-color: $priority-medium;
+  }
+
+  &[data-value='High'][data-active='true'] {
+    background: $priority-high;
+    color: $bg-primary;
+    border-color: $priority-high;
+  }
+}
+
+.clearBtn {
+  font-size: $text-sm;
+  color: $cream;
+  background: $rust;
+  border-radius: 100px;
+  padding: 3px 10px;
+  align-self: flex-end;
+  transition: opacity 0.15s;
+
+  &:hover {
+    opacity: 0.85;
+  }
+}

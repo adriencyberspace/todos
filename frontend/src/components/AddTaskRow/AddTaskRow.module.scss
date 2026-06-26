@@ -1,0 +1,55 @@
+@use '../../styles/variables' as *;
+
+.row {
+  display: grid;
+  grid-template-columns: 40px 1fr 100px 110px 40px;
+  align-items: center;
+  height: 44px;
+  padding: 0 8px;
+  cursor: pointer;
+
+  &:hover .placeholder {
+    color: $text-secondary;
+  }
+}
+
+.circle {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 1.5px solid $border;
+  opacity: 0.4;
+  margin: 0 auto;
+}
+
+.titleCol {
+  display: flex;
+  align-items: center;
+  padding: 0 8px;
+}
+
+.placeholder {
+  color: rgba(255, 255, 255, 0.35);
+  font-size: $text-base;
+  user-select: none;
+  transition: color 0.15s;
+}
+
+.input {
+  width: 100%;
+  font-size: $text-base;
+  color: $text-primary;
+  background: transparent;
+  border: none;
+  outline: none;
+
+  &::placeholder {
+    color: $text-muted;
+  }
+}
+
+.dateCol,
+.priorityCol,
+.actionsCol {
+  // empty placeholder columns
+}

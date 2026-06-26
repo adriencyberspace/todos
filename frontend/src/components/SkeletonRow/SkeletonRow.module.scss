@@ -1,0 +1,47 @@
+@use '../../styles/variables' as *;
+
+@keyframes shimmer {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 0.15; }
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 40px 1fr 100px 110px 40px;
+  align-items: center;
+  height: 44px;
+  padding: 0 8px;
+}
+
+.col {
+  display: flex;
+  align-items: center;
+}
+
+.block {
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 4px;
+  animation: shimmer 1.4s ease-in-out infinite;
+}
+
+.circle {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+}
+
+.title {
+  height: 14px;
+  width: 60%;
+}
+
+.date {
+  height: 14px;
+  width: 60px;
+}
+
+.badge {
+  height: 22px;
+  width: 70px;
+  border-radius: 100px;
+}

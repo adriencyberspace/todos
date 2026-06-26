@@ -1,0 +1,192 @@
+@use '../../styles/variables' as *;
+
+.row {
+  display: grid;
+  grid-template-columns: 40px 1fr 100px 110px 40px;
+  align-items: center;
+  min-height: 44px;
+  padding: 8px 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  transition: background 0.1s;
+
+  &:hover {
+    background: $bg-secondary;
+
+    .editBtn,
+    .deleteBtn {
+      opacity: 1;
+    }
+  }
+
+  &.completed .title {
+    color: $text-muted;
+    text-decoration: line-through;
+  }
+}
+
+.completeCol {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.circle {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 1.5px solid $border;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color 0.15s, background 0.15s;
+  flex-shrink: 0;
+  color: $white;
+
+  &:hover:not([data-completed='true']) {
+    border-color: rgba(255, 255, 255, 0.3);
+  }
+
+  &[data-completed='true'] {
+    background: $green-check;
+    border-color: $green-check;
+  }
+}
+
+.titleCol {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  overflow: hidden;
+  padding: 0 8px;
+  gap: 2px;
+}
+
+.title {
+  font-size: $text-base;
+  color: $text-primary;
+  cursor: text;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%;
+
+  &:hover {
+    opacity: 0.85;
+  }
+}
+
+.titleInput {
+  width: 100%;
+  font-size: $text-base;
+  color: $text-primary;
+  background: transparent;
+  border: none;
+  outline: none;
+  padding: 0;
+}
+
+.description {
+  font-size: $text-sm;
+  color: rgba(255, 255, 255, 0.4);
+  cursor: text;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%;
+
+  &:hover {
+    color: rgba(255, 255, 255, 0.6);
+  }
+}
+
+.descriptionPlaceholder {
+  font-size: $text-sm;
+  color: transparent;
+  cursor: text;
+  width: 100%;
+  transition: color 0.15s;
+
+  .row:hover & {
+    color: rgba(255, 255, 255, 0.2);
+  }
+}
+
+.descriptionInput {
+  width: 100%;
+  font-size: $text-sm;
+  color: rgba(255, 255, 255, 0.6);
+  background: transparent;
+  border: none;
+  outline: none;
+  padding: 0;
+
+  &::placeholder {
+    color: rgba(255, 255, 255, 0.2);
+  }
+}
+
+.dateCol {
+  padding: 0 8px;
+}
+
+.dueDate {
+  font-size: $text-base;
+  color: $text-secondary;
+  white-space: nowrap;
+}
+
+.overdue {
+  color: $overdue;
+}
+
+.priorityCol {
+  padding: 0 8px;
+}
+
+.actionsCol {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 4px;
+}
+
+.editBtn,
+.deleteBtn {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.15s, background 0.15s;
+  color: $text-secondary;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.08);
+    color: $text-primary;
+  }
+}
+
+.deleteBtn:hover {
+  color: $priority-high;
+}
+
+@media (max-width: 640px) {
+  .row {
+    grid-template-columns: 40px 1fr 110px 40px;
+    height: auto;
+    min-height: 44px;
+    padding: 8px;
+  }
+
+  .dateCol {
+    display: none;
+  }
+
+  .titleCol {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+}

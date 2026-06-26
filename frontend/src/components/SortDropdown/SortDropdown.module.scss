@@ -1,0 +1,59 @@
+@use '../../styles/variables' as *;
+
+.container {
+  position: relative;
+}
+
+.trigger {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: $text-sm;
+  color: $text-secondary;
+  transition: color 0.15s, background 0.15s;
+
+  &:hover {
+    color: $text-primary;
+    background: rgba(255, 255, 255, 0.06);
+  }
+}
+
+.dropdown {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  z-index: 100;
+  background: $bg-secondary;
+  border: 1px solid $border;
+  border-radius: 8px;
+  padding: 4px;
+  min-width: 190px;
+  display: flex;
+  flex-direction: column;
+}
+
+.option {
+  padding: 8px 12px;
+  border-radius: 4px;
+  font-size: $text-base;
+  color: $text-secondary;
+  text-align: left;
+  transition: all 0.15s;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.05);
+    color: $text-primary;
+  }
+
+  &[data-active='true'] {
+    background: $rust;
+    color: $cream;
+
+    &:hover {
+      background: $rust;
+      opacity: 0.9;
+    }
+  }
+}
