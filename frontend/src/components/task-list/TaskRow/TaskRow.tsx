@@ -1,10 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
 import { Check, X, Pencil } from 'lucide-react';
-import type { Todo } from '../../types/todo';
-import { useToggleTodo } from '../../hooks/useToggleTodo';
-import { useUpdateTodo } from '../../hooks/useUpdateTodo';
-import { PriorityBadge } from '../PriorityBadge/PriorityBadge';
-import { formatDueDate } from '../../utils/date';
+import type { Todo } from '../../../types/todo';
+import { useToggleTodo } from '../../../hooks/useToggleTodo';
+import { useUpdateTodo } from '../../../hooks/useUpdateTodo';
+import { PriorityBadge } from '../../PriorityBadge/PriorityBadge';
+import { formatDueDate } from '../../../utils/date';
 import styles from './TaskRow.module.scss';
 
 interface Props {

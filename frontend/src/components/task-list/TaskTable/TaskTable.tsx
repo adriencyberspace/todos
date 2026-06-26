@@ -1,4 +1,4 @@
-import type { Todo, StatusFilter, PriorityFilter } from '../../types/todo';
+import type { Todo, StatusFilter, PriorityFilter } from '../../../types/todo';
 import { TaskRow } from '../TaskRow/TaskRow';
 import { SkeletonRow } from '../SkeletonRow/SkeletonRow';
 import { EmptyState } from '../EmptyState/EmptyState';

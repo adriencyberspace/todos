@@ -3,11 +3,13 @@ import userEvent from '@testing-library/user-event';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import type { ReactNode } from 'react';
-import { TaskTable } from '../components/TaskTable/TaskTable';
+import { TaskTable } from '../components/task-list/TaskTable/TaskTable';
 import type { Todo } from '../types/todo';
 
-vi.mock('../hooks/useCompleteTodo', () => ({
-  useCompleteTodo: () => ({ mutate: mockCompleteMutate }),
+const mockToggleMutate = vi.fn();
+
+vi.mock('../hooks/useToggleTodo', () => ({
+  useToggleTodo: () => ({ mutate: mockToggleMutate }),
 }));
 
 vi.mock('../hooks/useUpdateTodo', () => ({
@@ -17,8 +19,6 @@ vi.mock('../hooks/useUpdateTodo', () => ({
 vi.mock('../hooks/useCreateTodo', () => ({
   useCreateTodo: () => ({ mutate: vi.fn() }),
 }));
-
-const mockCompleteMutate = vi.fn();
 
 const makeTodo = (overrides: Partial<Todo> = {}): Todo => ({
   id: 'todo-1',
@@ -50,7 +50,7 @@ const defaultProps = {
 
 describe('TaskTable', () => {
   beforeEach(() => {
-    mockCompleteMutate.mockClear();
+    mockToggleMutate.mockClear();
   });
 
   it('renders 5 skeleton rows while loading', () => {
@@ -74,7 +74,7 @@ describe('TaskTable', () => {
     expect(screen.getByText('Second Task')).toBeInTheDocument();
   });
 
-  it('calls completeTodo mutation with correct id when completion circle is clicked', async () => {
+  it('calls toggleTodo mutation with correct id and completed state when completion circle is clicked', async () => {
     const user = userEvent.setup();
     const todo = makeTodo({ id: 'todo-abc', title: 'Clickable Task' });
     render(
@@ -83,6 +83,6 @@ describe('TaskTable', () => {
     );
     const completeBtn = screen.getByRole('button', { name: /mark as complete/i });
     await user.click(completeBtn);
-    expect(mockCompleteMutate).toHaveBeenCalledWith('todo-abc');
+    expect(mockToggleMutate).toHaveBeenCalledWith({ id: 'todo-abc', completed: true });
   });
 });

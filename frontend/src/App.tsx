@@ -4,7 +4,7 @@ import { useTodos } from './hooks/useTodos';
 import { useFilterState } from './hooks/useFilterState';
 import { useUndoDelete } from './hooks/useUndoDelete';
 import { sortTodos } from './utils/sort';
-import { TaskTable } from './components/TaskTable/TaskTable';
+import { TaskTable } from './components/task-list/TaskTable/TaskTable';
 import { FilterPopover } from './components/FilterPopover/FilterPopover';
 import { SortDropdown } from './components/SortDropdown/SortDropdown';
 import { EditTaskModal } from './components/EditTaskModal/EditTaskModal';
