@@ -5,8 +5,9 @@ using TodoApi.Api.Services;
 
 namespace TodoApi.Api.Controllers;
 
+[ApiController]
 [Route("todos")]
-public class TodosController(ITodoService service) : ApiControllerBase
+public class TodosController(ITodoService service) : ControllerBase
 {
     [HttpGet]
     [ProducesResponseType<List<TodoResponse>>(StatusCodes.Status200OK)]

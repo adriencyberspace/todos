@@ -3,7 +3,6 @@ using Microsoft.EntityFrameworkCore;
 using Serilog;
 using Scalar.AspNetCore;
 using TodoApi.Api.Data;
-using TodoApi.Api.Infrastructure.Filters;
 using TodoApi.Api.Infrastructure.Middlewares;
 using TodoApi.Api.Infrastructure.OpenApi;
 using TodoApi.Api.Services;
@@ -37,10 +36,7 @@ namespace TodoApi.Api
                 .AddHttpContextAccessor()
                 .AddRouting(options => options.LowercaseUrls = true);
 
-            services.AddMvcCore(options =>
-                {
-                    options.Filters.Add<HttpGlobalExceptionFilter>();
-                })
+            services.AddMvcCore()
                 .AddApiExplorer()
                 .AddDataAnnotations();
 

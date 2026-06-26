@@ -10,6 +10,8 @@ namespace TodoApi.UnitTests.Services;
 
 public class TodoServiceTests
 {
+    private static CancellationToken Ct => TestContext.Current.CancellationToken;
+
     private static TodoContext CreateContext() =>
         new(new DbContextOptionsBuilder<TodoContext>()
             .UseInMemoryDatabase(Guid.NewGuid().ToString())
@@ -24,7 +26,7 @@ public class TodoServiceTests
         var request = new CreateTodoRequest("Buy milk", null, null, Priority.Medium);
 
         //when
-        var response = await service.CreateAsync(request, CancellationToken.None);
+        var response = await service.CreateAsync(request, Ct);
 
         //then
         response.IsCompleted.Should().BeFalse();
@@ -39,11 +41,11 @@ public class TodoServiceTests
         using var ctx = CreateContext();
         var todo = new Todo { Title = "Test", CreatedAt = DateTime.UtcNow };
         ctx.Todos.Add(todo);
-        await ctx.SaveChangesAsync(TestContext.Current.CancellationToken);
+        await ctx.SaveChangesAsync(Ct);
         var service = new TodoService(ctx);
 
         //when
-        var response = await service.CompleteAsync(todo.Id, CancellationToken.None);
+        var response = await service.CompleteAsync(todo.Id, Ct);
 
         //then
         response.Should().NotBeNull();
@@ -65,11 +67,11 @@ public class TodoServiceTests
             CompletedAt = originalCompletedAt,
         };
         ctx.Todos.Add(todo);
-        await ctx.SaveChangesAsync(TestContext.Current.CancellationToken);
+        await ctx.SaveChangesAsync(Ct);
         var service = new TodoService(ctx);
 
         //when
-        var response = await service.CompleteAsync(todo.Id, CancellationToken.None);
+        var response = await service.CompleteAsync(todo.Id, Ct);
 
         //then
         response!.CompletedAt.Should().Be(originalCompletedAt);
@@ -84,11 +86,11 @@ public class TodoServiceTests
             new Todo { Title = "Done", CreatedAt = DateTime.UtcNow, IsCompleted = true },
             new Todo { Title = "Pending", CreatedAt = DateTime.UtcNow, IsCompleted = false }
         );
-        await ctx.SaveChangesAsync(TestContext.Current.CancellationToken);
+        await ctx.SaveChangesAsync(Ct);
         var service = new TodoService(ctx);
 
         //when
-        var items = await service.GetAllAsync(completed: true, priority: null, CancellationToken.None);
+        var items = await service.GetAllAsync(completed: true, priority: null, Ct);
 
         //then
         items.Should().HaveCount(1);
@@ -104,11 +106,11 @@ public class TodoServiceTests
             new Todo { Title = "High priority", CreatedAt = DateTime.UtcNow, Priority = Priority.High },
             new Todo { Title = "Low priority", CreatedAt = DateTime.UtcNow, Priority = Priority.Low }
         );
-        await ctx.SaveChangesAsync(TestContext.Current.CancellationToken);
+        await ctx.SaveChangesAsync(Ct);
         var service = new TodoService(ctx);
 
         //when
-        var items = await service.GetAllAsync(completed: null, priority: Priority.High, CancellationToken.None);
+        var items = await service.GetAllAsync(completed: null, priority: Priority.High, Ct);
 
         //then
         items.Should().HaveCount(1);
@@ -122,15 +124,15 @@ public class TodoServiceTests
         using var ctx = CreateContext();
         var todo = new Todo { Title = "To delete", CreatedAt = DateTime.UtcNow };
         ctx.Todos.Add(todo);
-        await ctx.SaveChangesAsync(TestContext.Current.CancellationToken);
+        await ctx.SaveChangesAsync(Ct);
         var service = new TodoService(ctx);
 
         //when
-        var deleted = await service.DeleteAsync(todo.Id, CancellationToken.None);
+        var deleted = await service.DeleteAsync(todo.Id, Ct);
 
         //then
         deleted.Should().BeTrue();
-        var result = await service.GetByIdAsync(todo.Id, CancellationToken.None);
+        var result = await service.GetByIdAsync(todo.Id, Ct);
         result.Should().BeNull();
     }
 
@@ -141,11 +143,11 @@ public class TodoServiceTests
         using var ctx = CreateContext();
         var todo = new Todo { Title = "Find me", CreatedAt = DateTime.UtcNow };
         ctx.Todos.Add(todo);
-        await ctx.SaveChangesAsync(TestContext.Current.CancellationToken);
+        await ctx.SaveChangesAsync(Ct);
         var service = new TodoService(ctx);
 
         //when
-        var response = await service.GetByIdAsync(todo.Id, CancellationToken.None);
+        var response = await service.GetByIdAsync(todo.Id, Ct);
 
         //then
         response.Should().NotBeNull();
@@ -160,7 +162,7 @@ public class TodoServiceTests
         var service = new TodoService(ctx);
 
         //when
-        var response = await service.GetByIdAsync(Guid.NewGuid(), CancellationToken.None);
+        var response = await service.GetByIdAsync(Guid.NewGuid(), Ct);
 
         //then
         response.Should().BeNull();
@@ -173,12 +175,12 @@ public class TodoServiceTests
         using var ctx = CreateContext();
         var todo = new Todo { Title = "Old title", Priority = Priority.Low, CreatedAt = DateTime.UtcNow };
         ctx.Todos.Add(todo);
-        await ctx.SaveChangesAsync(TestContext.Current.CancellationToken);
+        await ctx.SaveChangesAsync(Ct);
         var service = new TodoService(ctx);
         var request = new UpdateTodoRequest("New title", null, null, Priority.High);
 
         //when
-        var response = await service.UpdateAsync(todo.Id, request, CancellationToken.None);
+        var response = await service.UpdateAsync(todo.Id, request, Ct);
 
         //then
         response.Should().NotBeNull();
@@ -195,7 +197,7 @@ public class TodoServiceTests
         var request = new UpdateTodoRequest("Title", null, null, Priority.Medium);
 
         //when
-        var response = await service.UpdateAsync(Guid.NewGuid(), request, CancellationToken.None);
+        var response = await service.UpdateAsync(Guid.NewGuid(), request, Ct);
 
         //then
         response.Should().BeNull();
@@ -214,11 +216,11 @@ public class TodoServiceTests
             CompletedAt = DateTime.UtcNow,
         };
         ctx.Todos.Add(todo);
-        await ctx.SaveChangesAsync(TestContext.Current.CancellationToken);
+        await ctx.SaveChangesAsync(Ct);
         var service = new TodoService(ctx);
 
         //when
-        var response = await service.UncompleteAsync(todo.Id, CancellationToken.None);
+        var response = await service.UncompleteAsync(todo.Id, Ct);
 
         //then
         response.Should().NotBeNull();
@@ -239,11 +241,11 @@ public class TodoServiceTests
             CompletedAt = null,
         };
         ctx.Todos.Add(todo);
-        await ctx.SaveChangesAsync(TestContext.Current.CancellationToken);
+        await ctx.SaveChangesAsync(Ct);
         var service = new TodoService(ctx);
 
         //when
-        var response = await service.UncompleteAsync(todo.Id, CancellationToken.None);
+        var response = await service.UncompleteAsync(todo.Id, Ct);
 
         //then
         response!.IsCompleted.Should().BeFalse();
@@ -258,9 +260,31 @@ public class TodoServiceTests
         var service = new TodoService(ctx);
 
         //when
-        var deleted = await service.DeleteAsync(Guid.NewGuid(), CancellationToken.None);
+        var deleted = await service.DeleteAsync(Guid.NewGuid(), Ct);
 
         //then
         deleted.Should().BeFalse();
+    }
+
+    [Fact]
+    public async Task GetAll_FilterByCompletedAndPriority_ReturnsOnlyMatchingTodos()
+    {
+        //given
+        using var ctx = CreateContext();
+        await ctx.Todos.AddRangeAsync(
+            new Todo { Title = "Done + High", CreatedAt = DateTime.UtcNow, IsCompleted = true, Priority = Priority.High },
+            new Todo { Title = "Done + Low", CreatedAt = DateTime.UtcNow, IsCompleted = true, Priority = Priority.Low },
+            new Todo { Title = "Pending + High", CreatedAt = DateTime.UtcNow, IsCompleted = false, Priority = Priority.High },
+            new Todo { Title = "Pending + Low", CreatedAt = DateTime.UtcNow, IsCompleted = false, Priority = Priority.Low }
+        );
+        await ctx.SaveChangesAsync(Ct);
+        var service = new TodoService(ctx);
+
+        //when
+        var items = await service.GetAllAsync(completed: true, priority: Priority.High, Ct);
+
+        //then
+        items.Should().HaveCount(1);
+        items[0].Title.Should().Be("Done + High");
     }
 }

@@ -18,13 +18,18 @@ namespace TodoApi.Api.Infrastructure.Configurations
             return new LoggerConfiguration()
                 .ReadFrom.Configuration(configuration)
                 .Filter.ByExcluding(Matching.WithProperty("RequestPath", "/"))
-                .Filter.ByIncludingOnly(e => e.Properties.TryGetValue("RequestPath", out var path) ? _pathsToOmit.Any(o => path.ToString().Contains(o)) ? e.Level >= LogEventLevel.Warning : true : true)
+                .Filter.ByIncludingOnly(ShouldLog)
                 .MinimumLevel.Override("Microsoft.Hosting.Lifetime", LogEventLevel.Information)
                 .MinimumLevel.Override("Microsoft.AspNetCore.Hosting.Diagnostics", LogEventLevel.Warning)
                 .MinimumLevel.Override("Microsoft.AspNetCore.Routing.EndpointMiddleware", LogEventLevel.Warning)
                 .Enrich.With(new VersionEnricher())
                 .CreateLogger();
         }
+
+        private static bool ShouldLog(LogEvent e) =>
+            !e.Properties.TryGetValue("RequestPath", out var path)
+            || !_pathsToOmit.Any(o => path.ToString().Contains(o))
+            || e.Level >= LogEventLevel.Warning;
 
         private static IConfigurationRoot LoadAppConfiguration()
         {

@@ -13,7 +13,7 @@ public class BadHttpRequestExceptionMiddleware : IMiddleware
         }
         catch (BadHttpRequestException exception)
         {
-            var message = exception.Message.Replace("Did you mean to use a Service instead?", string.Empty);
+            var message = exception.Message.Split('.')[0].Trim();
             var errorResponse = new HttpValidationProblemDetails(new Dictionary<string, string[]> { ["Body"] = [message] });
             await context.Response.WriteAsJsonAsync(errorResponse);
         }
