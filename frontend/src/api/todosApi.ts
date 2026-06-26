@@ -11,61 +11,26 @@ async function handleResponse<T>(res: Response): Promise<T> {
   return res.json();
 }
 
-export async function getTodos(params?: {
-  statusFilter?: StatusFilter;
-  priorityFilter?: PriorityFilter;
-}): Promise<Todo[]> {
+function jsonInit(method: string, body: unknown): RequestInit {
+  return { method, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) };
+}
+
+async function request<T>(path: string, init?: RequestInit): Promise<T> {
+  return handleResponse<T>(await fetch(`${BASE_URL}${path}`, init));
+}
+
+export function getTodos(params?: { statusFilter?: StatusFilter; priorityFilter?: PriorityFilter }): Promise<Todo[]> {
   const query = new URLSearchParams();
   if (params?.statusFilter === 'active') query.set('completed', 'false');
   else if (params?.statusFilter === 'completed') query.set('completed', 'true');
-  if (params?.priorityFilter && params.priorityFilter !== 'all') {
-    query.set('priority', params.priorityFilter);
-  }
+  if (params?.priorityFilter && params.priorityFilter !== 'all') query.set('priority', params.priorityFilter);
   const qs = query.toString();
-  const res = await fetch(`${BASE_URL}/todos${qs ? `?${qs}` : ''}`);
-  return handleResponse<Todo[]>(res);
+  return request<Todo[]>(`/todos${qs ? `?${qs}` : ''}`);
 }
 
-export async function getTodoById(id: string): Promise<Todo> {
-  const res = await fetch(`${BASE_URL}/todos/${id}`);
-  return handleResponse<Todo>(res);
-}
-
-export async function createTodo(data: CreateTodoRequest): Promise<Todo> {
-  const res = await fetch(`${BASE_URL}/todos`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(data),
-  });
-  return handleResponse<Todo>(res);
-}
-
-export async function updateTodo(id: string, data: UpdateTodoRequest): Promise<Todo> {
-  const res = await fetch(`${BASE_URL}/todos/${id}`, {
-    method: 'PUT',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(data),
-  });
-  return handleResponse<Todo>(res);
-}
-
-export async function completeTodo(id: string): Promise<Todo> {
-  const res = await fetch(`${BASE_URL}/todos/${id}/complete`, {
-    method: 'PATCH',
-  });
-  return handleResponse<Todo>(res);
-}
-
-export async function uncompleteTodo(id: string): Promise<Todo> {
-  const res = await fetch(`${BASE_URL}/todos/${id}/uncomplete`, {
-    method: 'PATCH',
-  });
-  return handleResponse<Todo>(res);
-}
-
-export async function deleteTodo(id: string): Promise<void> {
-  const res = await fetch(`${BASE_URL}/todos/${id}`, {
-    method: 'DELETE',
-  });
-  return handleResponse<void>(res);
-}
+export const getTodoById  = (id: string)                        => request<Todo>(`/todos/${id}`);
+export const createTodo   = (data: CreateTodoRequest)           => request<Todo>('/todos', jsonInit('POST', data));
+export const updateTodo   = (id: string, data: UpdateTodoRequest) => request<Todo>(`/todos/${id}`, jsonInit('PUT', data));
+export const completeTodo   = (id: string) => request<Todo>(`/todos/${id}/complete`, { method: 'PATCH' });
+export const uncompleteTodo = (id: string) => request<Todo>(`/todos/${id}/uncomplete`, { method: 'PATCH' });
+export const deleteTodo     = (id: string) => request<void>(`/todos/${id}`, { method: 'DELETE' });
