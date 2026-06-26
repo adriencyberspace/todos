@@ -1,34 +1,12 @@
 import { useEffect, useRef } from 'react';
 import { toast } from 'react-hot-toast';
 import { useQueryClient } from '@tanstack/react-query';
-import type { CSSProperties } from 'react';
 import type { Todo } from '../types/todo';
 import { useDeleteTodo } from './useDeleteTodo';
 import { queryKeys } from '../lib/queryKeys';
+import { DeleteToast } from '../components/DeleteToast/DeleteToast';
 
 const UNDO_DELAY_MS = 4000;
-
-const toastContainerStyle: CSSProperties = {
-  display: 'flex',
-  alignItems: 'center',
-  gap: '12px',
-  background: '#323438',
-  border: '1px solid rgba(255,255,255,0.08)',
-  borderRadius: '6px',
-  padding: '10px 14px',
-  color: '#fff',
-  fontSize: '14px',
-};
-
-const undoButtonStyle: CSSProperties = {
-  background: '#B05A36',
-  color: '#FEF9EF',
-  fontWeight: 500,
-  flexShrink: 0,
-  borderRadius: '100px',
-  padding: '3px 10px',
-  fontSize: '12px',
-};
 
 export function useUndoDelete() {
   const queryClient = useQueryClient();
@@ -77,12 +55,11 @@ export function useUndoDelete() {
     const toastId = `delete-${todo.id}`;
     toast.custom(
       (t) => (
-        <div style={{ ...toastContainerStyle, opacity: t.visible ? 1 : 0, transition: 'opacity 0.2s' }}>
-          <span>"{todo.title}" deleted</span>
-          <button onClick={() => handleUndo(toastId, todo)} style={undoButtonStyle}>
-            Undo
-          </button>
-        </div>
+        <DeleteToast
+          title={todo.title}
+          visible={t.visible}
+          onUndo={() => handleUndo(toastId, todo)}
+        />
       ),
       { id: toastId, duration: UNDO_DELAY_MS }
     );

@@ -16,7 +16,7 @@
 
   &:hover {
     color: $text-primary;
-    background: rgba(255, 255, 255, 0.06);
+    background: $surface-hover;
   }
 }
 
@@ -43,7 +43,7 @@
   transition: all 0.15s;
 
   &:hover {
-    background: rgba(255, 255, 255, 0.05);
+    background: $surface-input;
     color: $text-primary;
   }
 

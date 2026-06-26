@@ -7,6 +7,20 @@ $white: #FFFFFF;
 $text-primary: #FFFFFF;
 $text-secondary: rgba(255, 255, 255, 0.8);
 
+// Surfaces (white-on-dark tints)
+$surface-input:  rgba(255, 255, 255, 0.05);
+$surface-hover:  rgba(255, 255, 255, 0.06);
+$surface-subtle: rgba(255, 255, 255, 0.08);
+
+// Border variants
+$border-divider: rgba(255, 255, 255, 0.12);
+$border-hover:   rgba(255, 255, 255, 0.2);
+$border-strong:  rgba(255, 255, 255, 0.3);
+
+// Overlays
+$overlay: rgba(0, 0, 0, 0.6);
+$shadow:  rgba(0, 0, 0, 0.4);
+
 $green-check: #3DBE7A;
 $priority-low: #86EFAC;
 $priority-medium: #FDE68A;

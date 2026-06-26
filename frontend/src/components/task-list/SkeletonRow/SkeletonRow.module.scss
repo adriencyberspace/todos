@@ -19,7 +19,7 @@
 }
 
 .block {
-  background: rgba(255, 255, 255, 0.08);
+  background: $surface-subtle;
   border-radius: 4px;
   animation: shimmer 1.4s ease-in-out infinite;
 }

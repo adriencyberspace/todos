@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from 'react';
-import type { CSSProperties } from 'react';
 import { DayPicker } from 'react-day-picker';
 import 'react-day-picker/style.css';
 import { CalendarDays, X } from 'lucide-react';
@@ -20,11 +19,9 @@ interface Props {
 export function EditTaskModal({ todo, onClose, onDelete }: Props) {
   const [title, setTitle] = useState(todo.title);
   const [description, setDescription] = useState(todo.description ?? '');
-  const [dueDate, setDueDate] = useState<Date | undefined>(() => {
-    if (!todo.dueDate) return undefined;
-    const parts = todo.dueDate.split('T')[0].split('-');
-    return new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]));
-  });
+  const [dueDate, setDueDate] = useState<Date | undefined>(() =>
+    todo.dueDate ? new Date(todo.dueDate.split('T')[0] + 'T00:00:00') : undefined
+  );
   const [priority, setPriority] = useState<Priority>(todo.priority);
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
   const titleRef = useRef<HTMLInputElement>(null);
@@ -111,10 +108,7 @@ export function EditTaskModal({ todo, onClose, onDelete }: Props) {
                 <span>{dueDateLabel}</span>
               </button>
               {isCalendarOpen && (
-                <div
-                  className={styles.calendarPopover}
-                  style={{ '--rdp-accent-color': '#B05A36' } as CSSProperties}
-                >
+                <div className={styles.calendarPopover}>
                   <DayPicker
                     mode="single"
                     selected={dueDate}

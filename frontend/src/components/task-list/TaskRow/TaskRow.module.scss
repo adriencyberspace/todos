@@ -6,7 +6,7 @@
   align-items: center;
   min-height: 44px;
   padding: 8px 8px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  border-bottom: 1px solid $border-divider;
   transition: background 0.1s;
 
   &:hover {
@@ -43,7 +43,7 @@
   color: $white;
 
   &:hover:not([data-completed='true']) {
-    border-color: rgba(255, 255, 255, 0.3);
+    border-color: $border-strong;
   }
 
   &[data-completed='true'] {
@@ -163,7 +163,7 @@
   color: $text-secondary;
 
   &:hover {
-    background: rgba(255, 255, 255, 0.08);
+    background: $surface-subtle;
     color: $text-primary;
   }
 }

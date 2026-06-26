@@ -1,0 +1,29 @@
+@use '../../styles/variables' as *;
+
+.container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: $bg-secondary;
+  border: 1px solid $surface-subtle;
+  border-radius: 6px;
+  padding: 10px 14px;
+  color: $white;
+  font-size: $text-base;
+  opacity: 0;
+  transition: opacity 0.2s;
+
+  &.visible {
+    opacity: 1;
+  }
+}
+
+.undoBtn {
+  background: $rust;
+  color: $cream;
+  font-weight: 500;
+  flex-shrink: 0;
+  border-radius: 100px;
+  padding: 3px 10px;
+  font-size: $text-sm;
+}
