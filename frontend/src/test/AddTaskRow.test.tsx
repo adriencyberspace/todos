@@ -56,4 +56,16 @@ describe('AddTaskRow', () => {
     await user.keyboard('{Escape}');
     expect(screen.queryByRole('textbox')).not.toBeInTheDocument();
   });
+
+  it('clears input value after successful create', async () => {
+    const user = userEvent.setup();
+    mockCreateMutate.mockImplementation((_vars: unknown, options: { onSuccess?: () => void }) => {
+      options?.onSuccess?.();
+    });
+    render(<AddTaskRow />);
+    await user.click(screen.getByText('Add task...'));
+    await user.type(screen.getByRole('textbox'), 'Buy milk');
+    await user.keyboard('{Enter}');
+    expect(screen.getByRole('textbox')).toHaveValue('');
+  });
 });

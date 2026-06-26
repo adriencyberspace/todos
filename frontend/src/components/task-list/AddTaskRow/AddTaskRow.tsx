@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useCreateTodo } from '../../../hooks/useCreateTodo';
 import styles from './AddTaskRow.module.scss';
 
@@ -8,9 +8,12 @@ export function AddTaskRow() {
   const inputRef = useRef<HTMLInputElement>(null);
   const createTodo = useCreateTodo();
 
+  useEffect(() => {
+    if (isEditing) inputRef.current?.focus();
+  }, [isEditing]);
+
   function startEditing() {
     setIsEditing(true);
-    setTimeout(() => inputRef.current?.focus(), 0);
   }
 
   function submit() {

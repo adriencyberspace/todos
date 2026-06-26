@@ -36,7 +36,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: $text-muted;
+  color: $text-secondary;
 
   &:hover {
     background: rgba(255, 255, 255, 0.06);
@@ -58,7 +58,7 @@
 
 .fieldLabel {
   font-size: $text-sm;
-  color: $text-muted;
+  color: $text-secondary;
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
@@ -79,7 +79,7 @@
   }
 
   &::placeholder {
-    color: $text-muted;
+    color: $text-secondary;
   }
 }
 
@@ -101,7 +101,7 @@
   }
 
   &::placeholder {
-    color: $text-muted;
+    color: $text-secondary;
   }
 }
 
@@ -165,7 +165,7 @@
   width: 100%;
   padding: 6px 8px;
   font-size: $text-sm;
-  color: $text-muted;
+  color: $text-secondary;
   text-align: center;
   border-top: 1px solid $border;
   margin-top: 4px;

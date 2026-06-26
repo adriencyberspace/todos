@@ -85,4 +85,38 @@ describe('TaskTable', () => {
     await user.click(completeBtn);
     expect(mockToggleMutate).toHaveBeenCalledWith({ id: 'todo-abc', completed: true });
   });
+
+  it('shows empty state when todos list is empty and no filters active', () => {
+    render(
+      <TaskTable {...defaultProps} todos={[]} isLoading={false} />,
+      { wrapper: makeWrapper() }
+    );
+    expect(screen.getByText('No tasks yet. Add one below.')).toBeInTheDocument();
+  });
+
+  it('shows filtered empty state and clear-filters button when filters active and no results', () => {
+    render(
+      <TaskTable
+        {...defaultProps}
+        todos={[]}
+        isLoading={false}
+        statusFilter="active"
+      />,
+      { wrapper: makeWrapper() }
+    );
+    expect(screen.getByText('No tasks match your filters.')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Clear filters' })).toBeInTheDocument();
+  });
+
+  it('shows all-done state below task rows when all todos are completed and no status filter active', () => {
+    const todos = [
+      makeTodo({ id: '1', isCompleted: true }),
+      makeTodo({ id: '2', isCompleted: true }),
+    ];
+    render(
+      <TaskTable {...defaultProps} todos={todos} isLoading={false} statusFilter="all" />,
+      { wrapper: makeWrapper() }
+    );
+    expect(screen.getByText(/you're all done/i)).toBeInTheDocument();
+  });
 });

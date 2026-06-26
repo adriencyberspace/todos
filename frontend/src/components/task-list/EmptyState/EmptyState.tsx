@@ -1,9 +1,8 @@
 import styles from './EmptyState.module.scss';
 
-interface Props {
-  variant: 'empty' | 'filtered' | 'allDone';
-  onClearFilters?: () => void;
-}
+type Props =
+  | { variant: 'empty' | 'allDone' }
+  | { variant: 'filtered'; onClearFilters: () => void };
 
 export function EmptyState({ variant, onClearFilters }: Props) {
   if (variant === 'empty') {

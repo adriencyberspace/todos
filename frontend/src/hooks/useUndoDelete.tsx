@@ -33,6 +33,8 @@ const undoButtonStyle: CSSProperties = {
 export function useUndoDelete() {
   const queryClient = useQueryClient();
   const deleteMutation = useDeleteTodo();
+  const deleteMutationRef = useRef(deleteMutation);
+  deleteMutationRef.current = deleteMutation;
   const pendingDelete = useRef<{
     todo: Todo;
     timeoutId: ReturnType<typeof setTimeout>;
@@ -42,10 +44,9 @@ export function useUndoDelete() {
     return () => {
       if (pendingDelete.current) {
         clearTimeout(pendingDelete.current.timeoutId);
-        deleteMutation.mutate(pendingDelete.current.todo.id);
+        deleteMutationRef.current.mutate(pendingDelete.current.todo.id);
       }
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   function removeFromCache(id: string) {

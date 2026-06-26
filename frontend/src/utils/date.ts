@@ -1,11 +1,7 @@
 export function formatDueDate(dueDate: string | null): { text: string; overdue: boolean } {
   if (!dueDate) return { text: '', overdue: false };
 
-  const parts = dueDate.split('T')[0].split('-');
-  const year = parseInt(parts[0], 10);
-  const month = parseInt(parts[1], 10) - 1;
-  const day = parseInt(parts[2], 10);
-  const date = new Date(year, month, day);
+  const date = new Date(dueDate.split('T')[0] + 'T00:00:00');
 
   const now = new Date();
   const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
