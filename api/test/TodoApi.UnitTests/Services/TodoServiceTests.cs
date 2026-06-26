@@ -133,4 +133,134 @@ public class TodoServiceTests
         var result = await service.GetByIdAsync(todo.Id, CancellationToken.None);
         result.Should().BeNull();
     }
+
+    [Fact]
+    public async Task GetById_ReturnsTodo_WhenFound()
+    {
+        //given
+        using var ctx = CreateContext();
+        var todo = new Todo { Title = "Find me", CreatedAt = DateTime.UtcNow };
+        ctx.Todos.Add(todo);
+        await ctx.SaveChangesAsync(TestContext.Current.CancellationToken);
+        var service = new TodoService(ctx);
+
+        //when
+        var response = await service.GetByIdAsync(todo.Id, CancellationToken.None);
+
+        //then
+        response.Should().NotBeNull();
+        response!.Id.Should().Be(todo.Id);
+    }
+
+    [Fact]
+    public async Task GetById_ReturnsNull_WhenNotFound()
+    {
+        //given
+        using var ctx = CreateContext();
+        var service = new TodoService(ctx);
+
+        //when
+        var response = await service.GetByIdAsync(Guid.NewGuid(), CancellationToken.None);
+
+        //then
+        response.Should().BeNull();
+    }
+
+    [Fact]
+    public async Task Update_UpdatesFields_WhenFound()
+    {
+        //given
+        using var ctx = CreateContext();
+        var todo = new Todo { Title = "Old title", Priority = Priority.Low, CreatedAt = DateTime.UtcNow };
+        ctx.Todos.Add(todo);
+        await ctx.SaveChangesAsync(TestContext.Current.CancellationToken);
+        var service = new TodoService(ctx);
+        var request = new UpdateTodoRequest("New title", null, null, Priority.High);
+
+        //when
+        var response = await service.UpdateAsync(todo.Id, request, CancellationToken.None);
+
+        //then
+        response.Should().NotBeNull();
+        response!.Title.Should().Be("New title");
+        response.Priority.Should().Be(Priority.High);
+    }
+
+    [Fact]
+    public async Task Update_ReturnsNull_WhenNotFound()
+    {
+        //given
+        using var ctx = CreateContext();
+        var service = new TodoService(ctx);
+        var request = new UpdateTodoRequest("Title", null, null, Priority.Medium);
+
+        //when
+        var response = await service.UpdateAsync(Guid.NewGuid(), request, CancellationToken.None);
+
+        //then
+        response.Should().BeNull();
+    }
+
+    [Fact]
+    public async Task Uncomplete_SetsIsCompletedFalseAndClearsCompletedAt()
+    {
+        //given
+        using var ctx = CreateContext();
+        var todo = new Todo
+        {
+            Title = "Done task",
+            CreatedAt = DateTime.UtcNow.AddHours(-1),
+            IsCompleted = true,
+            CompletedAt = DateTime.UtcNow,
+        };
+        ctx.Todos.Add(todo);
+        await ctx.SaveChangesAsync(TestContext.Current.CancellationToken);
+        var service = new TodoService(ctx);
+
+        //when
+        var response = await service.UncompleteAsync(todo.Id, CancellationToken.None);
+
+        //then
+        response.Should().NotBeNull();
+        response!.IsCompleted.Should().BeFalse();
+        response.CompletedAt.Should().BeNull();
+    }
+
+    [Fact]
+    public async Task Uncomplete_IsIdempotent_DoesNotChangeState()
+    {
+        //given
+        using var ctx = CreateContext();
+        var todo = new Todo
+        {
+            Title = "Not done",
+            CreatedAt = DateTime.UtcNow,
+            IsCompleted = false,
+            CompletedAt = null,
+        };
+        ctx.Todos.Add(todo);
+        await ctx.SaveChangesAsync(TestContext.Current.CancellationToken);
+        var service = new TodoService(ctx);
+
+        //when
+        var response = await service.UncompleteAsync(todo.Id, CancellationToken.None);
+
+        //then
+        response!.IsCompleted.Should().BeFalse();
+        response.CompletedAt.Should().BeNull();
+    }
+
+    [Fact]
+    public async Task Delete_ReturnsFalse_WhenNotFound()
+    {
+        //given
+        using var ctx = CreateContext();
+        var service = new TodoService(ctx);
+
+        //when
+        var deleted = await service.DeleteAsync(Guid.NewGuid(), CancellationToken.None);
+
+        //then
+        deleted.Should().BeFalse();
+    }
 }
