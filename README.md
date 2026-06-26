@@ -1,0 +1,54 @@
+# Ezra Todo
+
+Full-stack todo app - .NET 10 REST API + React 19 frontend.
+
+## Prerequisites
+
+| Dependency | Version | Install |
+|------------|---------|---------|
+| [.NET 10 SDK](https://dotnet.microsoft.com/download/dotnet/10.0) | `10.x` | `brew install --cask dotnet-sdk` |
+| [Node.js](https://nodejs.org) | `18+` | `brew install node` |
+
+Verify: `dotnet --version` and `node --version`.
+
+## Quick Start
+
+```bash
+make dev
+```
+
+Then open **http://localhost:5173**.
+
+That's it. `make dev` installs frontend dependencies and starts both services. Press `Ctrl+C` to stop both.
+
+## What's Running
+
+| Service | URL |
+|---------|-----|
+| Frontend | http://localhost:5173 |
+| API | http://localhost:5000 |
+| API Docs (Scalar) | http://localhost:5000/api-doc |
+
+No database setup needed - SQLite is created automatically on first run.
+
+## Features
+
+- Create, edit, and delete tasks
+- Set priority (low / medium / high) and due date
+- Mark tasks complete
+- Filter by status and priority
+- Sort by any column
+- Undo delete (4-second window via toast notification)
+- Interactive API explorer at `/api-doc`
+
+## Stack
+
+| | |
+|-|--|
+| **Frontend** | React 19, TypeScript, Vite, TanStack Query, SCSS modules |
+| **Backend** | .NET 10, ASP.NET Core, Entity Framework Core, SQLite |
+
+## More
+
+- [API details, endpoints, and tests](./api/README.md)
+- [Frontend architecture and component notes](./frontend/README.md)

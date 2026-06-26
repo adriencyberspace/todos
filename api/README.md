@@ -1,10 +1,10 @@
 # TodoApi
 
-A local-dev Todo REST API built with .NET 10, EF Core, and SQLite. No external dependencies — `dotnet run` is all you need.
+A local-dev Todo REST API built with .NET 10, EF Core, and SQLite. No external dependencies - `dotnet run` is all you need.
 
 ## Prerequisites
 
-**[.NET 10 SDK](https://dotnet.microsoft.com/download/dotnet/10.0)** — verify with `dotnet --version` (should be `10.x.x`).
+**[.NET 10 SDK](https://dotnet.microsoft.com/download/dotnet/10.0)** - verify with `dotnet --version` (should be `10.x.x`).
 
 macOS (Homebrew):
 ```bash
@@ -43,13 +43,13 @@ Six unit tests covering create defaults, complete, idempotent complete, filter b
 
 ## Architecture decisions
 
-**SQLite over in-memory EF Core for the API** — SQLite persists across restarts. The `todos.db` file is created automatically on first run via `Database.Migrate()` in startup. In-memory EF Core is reserved for tests only.
+**SQLite over in-memory EF Core for the API** - SQLite persists across restarts. The `todos.db` file is created automatically on first run via `Database.Migrate()` in startup. In-memory EF Core is reserved for tests only.
 
-**GUID IDs** — non-enumerable, safe to expose in URLs without leaking record counts.
+**GUID IDs** - non-enumerable, safe to expose in URLs without leaking record counts.
 
-**No authentication** — scoped to local development. In production, add JWT bearer auth and lock the CORS policy to the deployed frontend origin.
+**No authentication** - scoped to local development. In production, add JWT bearer auth and lock the CORS policy to the deployed frontend origin.
 
-**No subtasks** — one-level todo items only. A `parentId` relationship is explicitly out of scope.
+**No subtasks** - one-level todo items only. A `parentId` relationship is explicitly out of scope.
 
 ## Production considerations
 

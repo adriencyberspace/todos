@@ -22,6 +22,12 @@ namespace TodoApi.Api
 
         public virtual void ConfigureServices(IServiceCollection services)
         {
+            services.ConfigureHttpJsonOptions(options =>
+            {
+                options.SerializerOptions.RespectNullableAnnotations = true;
+                options.SerializerOptions.RespectRequiredConstructorParameters = true;
+            });
+
             services.AddSerilog();
             services
                 .AddSingleton<ExceptionMiddleware>()

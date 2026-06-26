@@ -39,7 +39,7 @@ public class TodoServiceTests
         using var ctx = CreateContext();
         var todo = new Todo { Title = "Test", CreatedAt = DateTime.UtcNow };
         ctx.Todos.Add(todo);
-        await ctx.SaveChangesAsync();
+        await ctx.SaveChangesAsync(TestContext.Current.CancellationToken);
         var service = new TodoService(ctx);
 
         //when
@@ -65,7 +65,7 @@ public class TodoServiceTests
             CompletedAt = originalCompletedAt,
         };
         ctx.Todos.Add(todo);
-        await ctx.SaveChangesAsync();
+        await ctx.SaveChangesAsync(TestContext.Current.CancellationToken);
         var service = new TodoService(ctx);
 
         //when
@@ -80,11 +80,11 @@ public class TodoServiceTests
     {
         //given
         using var ctx = CreateContext();
-        ctx.Todos.AddRange(
+        await ctx.Todos.AddRangeAsync(
             new Todo { Title = "Done", CreatedAt = DateTime.UtcNow, IsCompleted = true },
             new Todo { Title = "Pending", CreatedAt = DateTime.UtcNow, IsCompleted = false }
         );
-        await ctx.SaveChangesAsync();
+        await ctx.SaveChangesAsync(TestContext.Current.CancellationToken);
         var service = new TodoService(ctx);
 
         //when
@@ -100,11 +100,11 @@ public class TodoServiceTests
     {
         //given
         using var ctx = CreateContext();
-        ctx.Todos.AddRange(
+        await ctx.Todos.AddRangeAsync(
             new Todo { Title = "High priority", CreatedAt = DateTime.UtcNow, Priority = Priority.High },
             new Todo { Title = "Low priority", CreatedAt = DateTime.UtcNow, Priority = Priority.Low }
         );
-        await ctx.SaveChangesAsync();
+        await ctx.SaveChangesAsync(TestContext.Current.CancellationToken);
         var service = new TodoService(ctx);
 
         //when
@@ -122,7 +122,7 @@ public class TodoServiceTests
         using var ctx = CreateContext();
         var todo = new Todo { Title = "To delete", CreatedAt = DateTime.UtcNow };
         ctx.Todos.Add(todo);
-        await ctx.SaveChangesAsync();
+        await ctx.SaveChangesAsync(TestContext.Current.CancellationToken);
         var service = new TodoService(ctx);
 
         //when
