@@ -17,9 +17,7 @@ Verify: `dotnet --version` and `node --version`.
 make dev
 ```
 
-Then open **http://localhost:5173**.
-
-That's it. `make dev` installs frontend dependencies and starts both services. Press `Ctrl+C` to stop both.
+`make dev` installs frontend dependencies and starts both services. Open **http://localhost:5173**. Press `Ctrl+C` to stop.
 
 ## What's Running
 
@@ -34,6 +32,7 @@ No database setup needed - SQLite is created automatically on first run.
 ## Features
 
 - Create, edit, and delete tasks
+- Inline creation and editing of task title and description
 - Set priority (low / medium / high) and due date
 - Mark tasks complete
 - Filter by status and priority

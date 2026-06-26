@@ -26,7 +26,7 @@ App runs at `http://localhost:5173`. Start the API first (`cd ../api/src/TodoApi
 npm run test
 ```
 
-Three tests in `src/test/TaskTable.test.tsx` cover: skeleton loading state, data rendering, and completion toggle mutation.
+22 tests across four files (`TaskTable`, `AddTaskRow`, `EmptyState`, `sort`). Coverage includes: loading/empty/filtered/all-done states, task rendering, completion toggle, inline create flow, sort ordering, and filter handler invocation.
 
 ## Architecture decisions
 
@@ -38,12 +38,15 @@ Three tests in `src/test/TaskTable.test.tsx` cover: skeleton loading state, data
 
 **CORS** - locked to `localhost:5173` in `Startup.cs`. In production, read the allowed origin from an environment variable.
 
-**Undo delete** - the pending-delete `useRef` lives in `App.tsx` (not `TaskRow`) because `TaskRow` unmounts immediately when the item is removed from the React Query cache. The 4-second `setTimeout` calls the real DELETE API call; clicking Undo cancels it and re-creates the task via POST.
+**Undo delete** - the pending-delete `useRef` lives in `useUndoDelete` (not `TaskRow`) because `TaskRow` unmounts immediately when the item is removed from the React Query cache. The 4-second `setTimeout` commits the real DELETE; clicking Undo cancels the timeout and restores the item in the cache.
 
 ## Future enhancements
 
-- Drag-to-reorder (needs an `order` field on the API model)
-- Pagination / infinite scroll
-- Authentication (JWT bearer)
-- Server-side sort and filter
-- Due date push notifications
+- **Categories / lists** - group todos under named lists; requires a `List` model and foreign key on `Todo`
+- **Detail page** (`/todos/:id`) - dedicated route per task for richer editing and history
+- **Due date times** - extend `dueDate` from date-only to full datetime with timezone support
+- **Alternative views** - board (Kanban columns by status/priority) or calendar view
+- **Drag-to-reorder** - needs an `order` field on the API model
+- **Server-side sort and filter** - necessary at scale; add `?orderBy=` and move filter logic out of the client
+- **Pagination / infinite scroll**
+- **Authentication** (JWT bearer)

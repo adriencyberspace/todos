@@ -31,6 +31,7 @@ Navigate to `http://localhost:5000/api-doc` for the Scalar interactive docs.
 | `POST` | `/todos` | Create a todo |
 | `PUT` | `/todos/{id}` | Update a todo |
 | `PATCH` | `/todos/{id}/complete` | Mark a todo complete (idempotent) |
+| `PATCH` | `/todos/{id}/uncomplete` | Mark a todo incomplete (idempotent) |
 | `DELETE` | `/todos/{id}` | Delete a todo |
 
 ## Tests
@@ -39,7 +40,7 @@ Navigate to `http://localhost:5000/api-doc` for the Scalar interactive docs.
 dotnet test TodoApi.slnx
 ```
 
-Six unit tests covering create defaults, complete, idempotent complete, filter by completed, filter by priority, and delete. Each test uses an isolated in-memory EF Core database.
+14 unit tests covering: create defaults, CRUD operations, complete/uncomplete with idempotency, combined filter (status + priority), and not-found paths. Each test uses an isolated in-memory EF Core database.
 
 ## Architecture decisions
 
