@@ -2,6 +2,17 @@
 
 A local-dev Todo REST API built with .NET 10, EF Core, and SQLite. No external dependencies — `dotnet run` is all you need.
 
+## Prerequisites
+
+**[.NET 10 SDK](https://dotnet.microsoft.com/download/dotnet/10.0)** — verify with `dotnet --version` (should be `10.x.x`).
+
+macOS (Homebrew):
+```bash
+brew install --cask dotnet-sdk
+```
+
+Or download the installer directly from [dotnet.microsoft.com/download/dotnet/10.0](https://dotnet.microsoft.com/download/dotnet/10.0).
+
 ## Setup
 
 ```bash

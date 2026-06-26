@@ -27,3 +27,9 @@ public record TodoResponse(
     DateTime? DueDate,
     Priority Priority
 );
+
+public static class TodoMappings
+{
+    public static TodoResponse ToResponse(this Todo t) =>
+        new(t.Id, t.Title, t.Description, t.IsCompleted, t.CreatedAt, t.CompletedAt, t.DueDate, t.Priority);
+}

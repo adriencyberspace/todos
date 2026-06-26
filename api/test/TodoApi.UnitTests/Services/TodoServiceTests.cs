@@ -1,14 +1,14 @@
 using AwesomeAssertions;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using TodoApi.Api.Controllers;
+using Xunit;
 using TodoApi.Api.Data;
 using TodoApi.Api.Dtos;
 using TodoApi.Api.Models;
+using TodoApi.Api.Services;
 
-namespace TodoApi.UnitTests.Controllers;
+namespace TodoApi.UnitTests.Services;
 
-public class TodosControllerTests
+public class TodoServiceTests
 {
     private static TodoContext CreateContext() =>
         new(new DbContextOptionsBuilder<TodoContext>()
@@ -20,15 +20,13 @@ public class TodosControllerTests
     {
         //given
         using var ctx = CreateContext();
-        var controller = new TodosController(ctx);
+        var service = new TodoService(ctx);
         var request = new CreateTodoRequest("Buy milk", null, null, Priority.Medium);
 
         //when
-        var result = await controller.Create(request, CancellationToken.None);
+        var response = await service.CreateAsync(request, CancellationToken.None);
 
         //then
-        var created = result.Should().BeOfType<CreatedAtActionResult>().Subject;
-        var response = created.Value.Should().BeOfType<TodoResponse>().Subject;
         response.IsCompleted.Should().BeFalse();
         response.CreatedAt.Should().BeCloseTo(DateTime.UtcNow, TimeSpan.FromSeconds(5));
         response.Priority.Should().Be(Priority.Medium);
@@ -42,15 +40,14 @@ public class TodosControllerTests
         var todo = new Todo { Title = "Test", CreatedAt = DateTime.UtcNow };
         ctx.Todos.Add(todo);
         await ctx.SaveChangesAsync();
-        var controller = new TodosController(ctx);
+        var service = new TodoService(ctx);
 
         //when
-        var result = await controller.Complete(todo.Id, CancellationToken.None);
+        var response = await service.CompleteAsync(todo.Id, CancellationToken.None);
 
         //then
-        var ok = result.Should().BeOfType<OkObjectResult>().Subject;
-        var response = ok.Value.Should().BeOfType<TodoResponse>().Subject;
-        response.IsCompleted.Should().BeTrue();
+        response.Should().NotBeNull();
+        response!.IsCompleted.Should().BeTrue();
         response.CompletedAt.Should().NotBeNull();
     }
 
@@ -69,15 +66,13 @@ public class TodosControllerTests
         };
         ctx.Todos.Add(todo);
         await ctx.SaveChangesAsync();
-        var controller = new TodosController(ctx);
+        var service = new TodoService(ctx);
 
         //when
-        var result = await controller.Complete(todo.Id, CancellationToken.None);
+        var response = await service.CompleteAsync(todo.Id, CancellationToken.None);
 
         //then
-        var ok = result.Should().BeOfType<OkObjectResult>().Subject;
-        var response = ok.Value.Should().BeOfType<TodoResponse>().Subject;
-        response.CompletedAt.Should().Be(originalCompletedAt);
+        response!.CompletedAt.Should().Be(originalCompletedAt);
     }
 
     [Fact]
@@ -90,14 +85,12 @@ public class TodosControllerTests
             new Todo { Title = "Pending", CreatedAt = DateTime.UtcNow, IsCompleted = false }
         );
         await ctx.SaveChangesAsync();
-        var controller = new TodosController(ctx);
+        var service = new TodoService(ctx);
 
         //when
-        var result = await controller.GetAll(completed: true, priority: null, CancellationToken.None);
+        var items = await service.GetAllAsync(completed: true, priority: null, CancellationToken.None);
 
         //then
-        var ok = result.Should().BeOfType<OkObjectResult>().Subject;
-        var items = ok.Value.Should().BeOfType<List<TodoResponse>>().Subject;
         items.Should().HaveCount(1);
         items[0].Title.Should().Be("Done");
     }
@@ -112,14 +105,12 @@ public class TodosControllerTests
             new Todo { Title = "Low priority", CreatedAt = DateTime.UtcNow, Priority = Priority.Low }
         );
         await ctx.SaveChangesAsync();
-        var controller = new TodosController(ctx);
+        var service = new TodoService(ctx);
 
         //when
-        var result = await controller.GetAll(completed: null, priority: Priority.High, CancellationToken.None);
+        var items = await service.GetAllAsync(completed: null, priority: Priority.High, CancellationToken.None);
 
         //then
-        var ok = result.Should().BeOfType<OkObjectResult>().Subject;
-        var items = ok.Value.Should().BeOfType<List<TodoResponse>>().Subject;
         items.Should().HaveCount(1);
         items[0].Title.Should().Be("High priority");
     }
@@ -132,14 +123,14 @@ public class TodosControllerTests
         var todo = new Todo { Title = "To delete", CreatedAt = DateTime.UtcNow };
         ctx.Todos.Add(todo);
         await ctx.SaveChangesAsync();
-        var controller = new TodosController(ctx);
+        var service = new TodoService(ctx);
 
         //when
-        var deleteResult = await controller.Delete(todo.Id, CancellationToken.None);
+        var deleted = await service.DeleteAsync(todo.Id, CancellationToken.None);
 
         //then
-        deleteResult.Should().BeOfType<NoContentResult>();
-        var getResult = await controller.GetById(todo.Id, CancellationToken.None);
-        getResult.Should().BeOfType<NotFoundResult>();
+        deleted.Should().BeTrue();
+        var result = await service.GetByIdAsync(todo.Id, CancellationToken.None);
+        result.Should().BeNull();
     }
 }

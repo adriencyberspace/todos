@@ -6,6 +6,7 @@ using TodoApi.Api.Data;
 using TodoApi.Api.Infrastructure.Filters;
 using TodoApi.Api.Infrastructure.Middlewares;
 using TodoApi.Api.Infrastructure.OpenApi;
+using TodoApi.Api.Services;
 
 namespace TodoApi.Api
 {
@@ -40,12 +41,14 @@ namespace TodoApi.Api
             services.AddDbContext<TodoContext>(options =>
                 options.UseSqlite(_configuration.GetConnectionString("DefaultConnection")));
 
+            services.AddScoped<ITodoService, TodoService>();
+
             services.AddOpenApi(_configuration);
 
             services.AddCors(options =>
             {
                 options.AddPolicy("Frontend", policy =>
-                    policy.WithOrigins("http://localhost:3000")
+                    policy.WithOrigins("http://localhost:5173")
                           .AllowAnyHeader()
                           .AllowAnyMethod());
             });
