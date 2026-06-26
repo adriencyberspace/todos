@@ -2,9 +2,9 @@
 
 .row {
   display: grid;
-  grid-template-columns: 40px 1fr 100px 110px 40px;
+  grid-template-columns: $grid-row-columns;
   align-items: center;
-  height: 44px;
+  height: $row-height;
   padding: 0 8px;
   cursor: pointer;
 
@@ -29,10 +29,10 @@
 }
 
 .placeholder {
-  color: rgba(255, 255, 255, 0.35);
+  color: $text-white-35;
   font-size: $text-base;
   user-select: none;
-  transition: color 0.15s;
+  transition: color $duration-base;
 }
 
 .input {

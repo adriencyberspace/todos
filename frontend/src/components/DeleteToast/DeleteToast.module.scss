@@ -6,12 +6,12 @@
   gap: 12px;
   background: $bg-secondary;
   border: 1px solid $surface-subtle;
-  border-radius: 6px;
+  border-radius: $radius-md;
   padding: 10px 14px;
   color: $white;
   font-size: $text-base;
   opacity: 0;
-  transition: opacity 0.2s;
+  transition: opacity $duration-slow;
 
   &.visible {
     opacity: 1;
@@ -23,7 +23,7 @@
   color: $cream;
   font-weight: 500;
   flex-shrink: 0;
-  border-radius: 100px;
+  border-radius: $radius-pill;
   padding: 3px 10px;
   font-size: $text-sm;
 }

@@ -9,10 +9,10 @@
   align-items: center;
   gap: 4px;
   padding: 4px 10px;
-  border-radius: 6px;
+  border-radius: $radius-md;
   font-size: $text-sm;
   color: $text-secondary;
-  transition: color 0.15s, background 0.15s;
+  transition: color $duration-base, background $duration-base;
 
   &:hover {
     color: $text-primary;
@@ -24,10 +24,10 @@
   position: absolute;
   top: calc(100% + 6px);
   right: 0;
-  z-index: 100;
+  z-index: $z-dropdown;
   background: $bg-secondary;
   border: 1px solid $border;
-  border-radius: 8px;
+  border-radius: $radius-lg;
   padding: 4px;
   min-width: 190px;
   display: flex;
@@ -36,11 +36,11 @@
 
 .option {
   padding: 8px 12px;
-  border-radius: 4px;
+  border-radius: $radius-sm;
   font-size: $text-base;
   color: $text-secondary;
   text-align: left;
-  transition: all 0.15s;
+  transition: all $duration-base;
 
   &:hover {
     background: $surface-input;

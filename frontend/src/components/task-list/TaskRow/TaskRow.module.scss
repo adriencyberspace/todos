@@ -2,12 +2,12 @@
 
 .row {
   display: grid;
-  grid-template-columns: 40px 1fr 100px 110px 40px;
+  grid-template-columns: $grid-row-columns;
   align-items: center;
-  min-height: 44px;
+  min-height: $row-height;
   padding: 8px 8px;
   border-bottom: 1px solid $border-divider;
-  transition: background 0.1s;
+  transition: background $duration-fast;
 
   &:hover {
     background: $bg-secondary;
@@ -38,7 +38,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: border-color 0.15s, background 0.15s;
+  transition: border-color $duration-base, background $duration-base;
   flex-shrink: 0;
   color: $white;
 
@@ -87,7 +87,7 @@
 
 .description {
   font-size: $text-sm;
-  color: rgba(255, 255, 255, 0.4);
+  color: $text-white-40;
   cursor: text;
   white-space: nowrap;
   overflow: hidden;
@@ -95,7 +95,7 @@
   width: 100%;
 
   &:hover {
-    color: rgba(255, 255, 255, 0.6);
+    color: $text-white-60;
   }
 }
 
@@ -104,24 +104,24 @@
   color: transparent;
   cursor: text;
   width: 100%;
-  transition: color 0.15s;
+  transition: color $duration-base;
 
   .row:hover & {
-    color: rgba(255, 255, 255, 0.2);
+    color: $text-white-20;
   }
 }
 
 .descriptionInput {
   width: 100%;
   font-size: $text-sm;
-  color: rgba(255, 255, 255, 0.6);
+  color: $text-white-60;
   background: transparent;
   border: none;
   outline: none;
   padding: 0;
 
   &::placeholder {
-    color: rgba(255, 255, 255, 0.2);
+    color: $text-white-20;
   }
 }
 
@@ -159,7 +159,7 @@
   align-items: center;
   justify-content: center;
   opacity: 0;
-  transition: opacity 0.15s, background 0.15s;
+  transition: opacity $duration-base, background $duration-base;
   color: $text-secondary;
 
   &:hover {
@@ -172,11 +172,11 @@
   color: $priority-high;
 }
 
-@media (max-width: 640px) {
+@media (max-width: #{$breakpoint-mobile}) {
   .row {
-    grid-template-columns: 40px 1fr 110px 40px;
+    grid-template-columns: $col-checkbox 1fr $col-priority $col-checkbox;
     height: auto;
-    min-height: 44px;
+    min-height: $row-height;
     padding: 8px;
   }
 
