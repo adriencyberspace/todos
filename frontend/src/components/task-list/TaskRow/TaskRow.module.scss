@@ -174,14 +174,25 @@
 
 @media (max-width: #{$breakpoint-mobile}) {
   .row {
-    grid-template-columns: $col-checkbox 1fr $col-priority $col-checkbox;
+    grid-template-columns: $col-checkbox 1fr auto 24px $col-checkbox;
     height: auto;
     min-height: $row-height;
     padding: 8px;
   }
 
   .dateCol {
-    display: none;
+    padding: 0 4px;
+  }
+
+  .dueDate {
+    font-size: $text-sm;
+  }
+
+  .priorityCol {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
   }
 
   .titleCol {
