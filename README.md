@@ -2,6 +2,8 @@
 
 Full-stack todo app - .NET 10 REST API + React 19 frontend.
 
+![Tasks view](./screenshot.png)
+
 ## Prerequisites
 
 | Dependency | Version | Install |
@@ -55,9 +57,7 @@ Hi, I'm Adrien, a full-stack engineer with a TypeScript/NestJS background.
 
 **Frontend:** My take on "production MVP" is something people would actually want to use. Inline editing on every field felt more natural than a modal form. Toasts with optimistic updates make completing tasks feel instant. The undo-delete window is there because accidental deletes happen and recovering from them shouldn't require hunting for a deleted state.
 
-Detailed architecture notes, endpoint docs, and production considerations are in [api/README.md](./api/README.md).
-
 ## More
 
-- [API details, endpoints, and tests](./api/README.md)
-- [Frontend architecture and component notes](./frontend/README.md)
+- [API README - API details, endpoints, and tests](./api/README.md)
+- [Frontend README - Frontend architecture and component notes](./frontend/README.md)

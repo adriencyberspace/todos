@@ -30,23 +30,28 @@ npm run test
 
 ## Architecture decisions
 
-**Why client-side sort** - the dataset is a personal, bounded todo list. Sorting 50–100 items in-memory is instant. With pagination or multi-user scale, sort would move to the API layer (add an `?orderBy=` query param).
+**Client-side sort:** the dataset is a personal, bounded todo list. Sorting 50-100 items in-memory is instant. With pagination or multi-user scale, sort would move to the API layer via an `?orderBy=` query param.
 
-**Why TanStack Query over plain `useEffect` + `useState`** - gives us query caching, background refetch on focus, optimistic update rollback, and consistent loading/error states with zero boilerplate.
+**TanStack Query over plain `useEffect` + `useState`:** gives us query caching, background refetch on focus, optimistic update rollback, and consistent loading/error states with zero boilerplate.
 
-**Why SQLite** - appropriate for a local-dev MVP. The EF Core abstraction means swapping to Postgres in production is a one-line connection string change.
+**Undo delete:** the pending-delete `useRef` lives in `useUndoDelete` rather than `TaskRow` because `TaskRow` unmounts immediately when the item is removed from the React Query cache. The 4-second `setTimeout` commits the real DELETE; clicking Undo cancels the timeout and restores the item in the cache.
 
-**CORS** - locked to `localhost:5173` in `Startup.cs`. In production, read the allowed origin from an environment variable.
+**No component library:** SCSS modules keep styles scoped and the bundle small. The UI is simple enough that a full design system would add more complexity than it removes.
 
-**Undo delete** - the pending-delete `useRef` lives in `useUndoDelete` (not `TaskRow`) because `TaskRow` unmounts immediately when the item is removed from the React Query cache. The 4-second `setTimeout` commits the real DELETE; clicking Undo cancels the timeout and restores the item in the cache.
+## Production considerations
 
-## Future enhancements
+Already in place:
+- Optimistic updates via TanStack Query — UI responds instantly, rolls back automatically on error
+- Undo delete: the pending-delete `useRef` lives in `useUndoDelete` rather than `TaskRow` because `TaskRow` unmounts immediately when the item is removed from the cache. A 4-second timeout commits the real DELETE; clicking Undo cancels it and restores the item.
+- No component library — SCSS modules keep styles scoped and the bundle small
+- 22 unit tests covering loading/empty/filtered states, completion toggle, inline create flow, sort ordering, and filter handler invocation
 
-- **Categories / lists** - group todos under named lists; requires a `List` model and foreign key on `Todo`
-- **Detail page** (`/todos/:id`) - dedicated route per task for richer editing and history
-- **Due date times** - extend `dueDate` from date-only to full datetime with timezone support
-- **Alternative views** - board (Kanban columns by status/priority) or calendar view
-- **Drag-to-reorder** - needs an `order` field on the API model
-- **Server-side sort and filter** - necessary at scale; add `?orderBy=` and move filter logic out of the client
-- **Pagination / infinite scroll**
-- **Authentication** (JWT bearer)
+Not implemented yet:
+- Auth (JWT bearer) and user-scoped todos
+- Pagination and server-side sort/filter once the dataset grows beyond what fits in memory
+- E2E tests (Playwright)
+- Due date times with timezone support (currently date-only)
+
+## What's next
+
+The most natural next step is categories or named lists, which would require a `List` model and a foreign key on `Todo`. After that, a detail page (`/todos/:id`) would open up richer editing and task history without crowding the table view. Drag-to-reorder (needs an `order` field on the model) and alternative views like a Kanban board or calendar would come after that.

@@ -54,7 +54,16 @@ dotnet test TodoApi.slnx
 
 ## Production considerations
 
+Already in place:
+- Serilog structured logging to console, with request logging middleware and a custom enricher that stamps every log line with the app version and git SHA
+- Exception middleware returns a generic error in production and logs at Critical — no stack traces leak to the client
+- Input validation on DTOs via data annotations, rejected before business logic runs
+- CORS uses an explicit origin whitelist, not `AllowAnyOrigin`
+- Async/await + `CancellationToken` threaded through the full stack so in-flight requests cancel cleanly if the client disconnects
+
+Not implemented yet:
 - Auth: JWT bearer with a claims-based policy
-- CORS: lock `WithOrigins` to the deployed frontend URL
+- CORS: lock `WithOrigins` to the deployed frontend URL (currently `localhost:5173`)
 - Rate limiting: `AddRateLimiter` with a fixed-window policy
 - Containerization: multi-stage Dockerfile targeting `mcr.microsoft.com/dotnet/aspnet:10.0-alpine`
+- Migrations: move `Database.Migrate()` out of startup and into a dedicated deploy pipeline step to avoid race conditions across multiple instances starting simultaneously
