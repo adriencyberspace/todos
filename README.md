@@ -47,6 +47,16 @@ No database setup needed - SQLite is created automatically on first run.
 | **Frontend** | React 19, TypeScript, Vite, TanStack Query, SCSS modules |
 | **Backend** | .NET 10, ASP.NET Core, Entity Framework Core, SQLite |
 
+## About
+
+Hi, I'm Adrien, a full-stack engineer with a TypeScript/NestJS background. 
+
+**Backend:** Controllers handle routing and HTTP concerns only. Business logic lives in a service layer, which is what the unit tests exercise directly. Cross-cutting concerns like error handling and request logging are in middleware. That separation makes each piece easy to reason about and test independently.
+
+**Frontend:** My take on "production MVP" is something people would actually want to use. Inline editing on every field felt more natural than a modal form. Toasts with optimistic updates make completing tasks feel instant. The undo-delete window is there because accidental deletes happen and recovering from them shouldn't require hunting for a deleted state.
+
+Detailed architecture notes, endpoint docs, and production considerations are in [api/README.md](./api/README.md).
+
 ## More
 
 - [API details, endpoints, and tests](./api/README.md)
