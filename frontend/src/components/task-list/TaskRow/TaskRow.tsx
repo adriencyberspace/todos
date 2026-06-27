@@ -1,11 +1,15 @@
 import { useEffect, useRef, useState } from 'react';
+import { DayPicker } from 'react-day-picker';
+import 'react-day-picker/style.css';
 import { Check, X, Pencil } from 'lucide-react';
-import type { Todo } from '../../../types/todo';
+import type { Priority, Todo } from '../../../types/todo';
 import { useToggleTodo } from '../../../hooks/useToggleTodo';
 import { useUpdateTodo } from '../../../hooks/useUpdateTodo';
 import { PriorityBadge } from '../../PriorityBadge/PriorityBadge';
-import { formatDueDate } from '../../../utils/date';
+import { formatDueDate, toISODateString } from '../../../utils/date';
 import styles from './TaskRow.module.scss';
+
+const PRIORITIES: Priority[] = ['Low', 'Medium', 'High'];
 
 interface Props {
   todo: Todo;
@@ -18,8 +22,12 @@ export function TaskRow({ todo, onEdit, onDelete }: Props) {
   const [titleValue, setTitleValue] = useState(todo.title);
   const [isEditingDescription, setIsEditingDescription] = useState(false);
   const [descriptionValue, setDescriptionValue] = useState(todo.description ?? '');
+  const [showDatePicker, setShowDatePicker] = useState(false);
+  const [showPriorityPicker, setShowPriorityPicker] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const descriptionRef = useRef<HTMLInputElement>(null);
+  const datePickerRef = useRef<HTMLDivElement>(null);
+  const priorityPickerRef = useRef<HTMLDivElement>(null);
   const toggleTodo = useToggleTodo();
   const updateTodo = useUpdateTodo();
   const { text: dueDateText, overdue } = formatDueDate(todo.dueDate);
@@ -46,6 +54,30 @@ export function TaskRow({ todo, onEdit, onDelete }: Props) {
   useEffect(() => {
     if (!isEditingDescription) setDescriptionValue(todo.description ?? '');
   }, [todo.description, isEditingDescription]);
+
+  useEffect(() => {
+    function handleClickOutside(e: MouseEvent) {
+      if (datePickerRef.current && !datePickerRef.current.contains(e.target as Node)) {
+        setShowDatePicker(false);
+      }
+    }
+    if (showDatePicker) {
+      document.addEventListener('mousedown', handleClickOutside);
+      return () => document.removeEventListener('mousedown', handleClickOutside);
+    }
+  }, [showDatePicker]);
+
+  useEffect(() => {
+    function handleClickOutside(e: MouseEvent) {
+      if (priorityPickerRef.current && !priorityPickerRef.current.contains(e.target as Node)) {
+        setShowPriorityPicker(false);
+      }
+    }
+    if (showPriorityPicker) {
+      document.addEventListener('mousedown', handleClickOutside);
+      return () => document.removeEventListener('mousedown', handleClickOutside);
+    }
+  }, [showPriorityPicker]);
 
   function startEditingTitle() {
     setTitleValue(todo.title);
@@ -113,6 +145,36 @@ export function TaskRow({ todo, onEdit, onDelete }: Props) {
   function handleComplete() {
     toggleTodo.mutate({ id: todo.id, completed: !todo.isCompleted });
   }
+
+  function handleDateSelect(date: Date | undefined) {
+    updateTodo.mutate({
+      id: todo.id,
+      data: {
+        title: todo.title,
+        description: todo.description,
+        dueDate: date ? toISODateString(date) : null,
+        priority: todo.priority,
+      },
+    });
+    setShowDatePicker(false);
+  }
+
+  function handlePrioritySelect(priority: Priority) {
+    updateTodo.mutate({
+      id: todo.id,
+      data: {
+        title: todo.title,
+        description: todo.description,
+        dueDate: todo.dueDate,
+        priority,
+      },
+    });
+    setShowPriorityPicker(false);
+  }
+
+  const selectedDate = todo.dueDate
+    ? new Date(todo.dueDate.split('T')[0] + 'T00:00:00')
+    : undefined;
 
   return (
     <div className={`${styles.row} ${todo.isCompleted ? styles.completed : ''}`}>
@@ -184,15 +246,59 @@ export function TaskRow({ todo, onEdit, onDelete }: Props) {
       </div>
 
       <div className={styles.dateCol}>
-        {dueDateText && (
-          <span className={`${styles.dueDate} ${overdue ? styles.overdue : ''}`}>
-            {dueDateText}
-          </span>
-        )}
+        <div ref={datePickerRef} className={styles.dateTrigger}>
+          <button
+            className={`${styles.dueDate} ${overdue ? styles.overdue : ''} ${!dueDateText ? styles.dueDateEmpty : ''}`}
+            onClick={() => setShowDatePicker((o) => !o)}
+            aria-label="Set due date"
+          >
+            {dueDateText || 'Set date'}
+          </button>
+          {showDatePicker && (
+            <div className={styles.calendarPopover}>
+              <DayPicker
+                mode="single"
+                selected={selectedDate}
+                onSelect={handleDateSelect}
+              />
+              {todo.dueDate && (
+                <button
+                  className={styles.clearDate}
+                  onClick={() => handleDateSelect(undefined)}
+                >
+                  Clear date
+                </button>
+              )}
+            </div>
+          )}
+        </div>
       </div>
 
       <div className={styles.priorityCol}>
-        <PriorityBadge priority={todo.priority} />
+        <div ref={priorityPickerRef} className={styles.priorityTrigger}>
+          <button
+            className={styles.priorityBadgeBtn}
+            onClick={() => setShowPriorityPicker((o) => !o)}
+            aria-label="Change priority"
+          >
+            <PriorityBadge priority={todo.priority} />
+          </button>
+          {showPriorityPicker && (
+            <div className={styles.priorityPopover}>
+              {PRIORITIES.map((p) => (
+                <button
+                  key={p}
+                  className={styles.priorityOption}
+                  data-value={p}
+                  data-active={todo.priority === p}
+                  onClick={() => handlePrioritySelect(p)}
+                >
+                  <PriorityBadge priority={p} full />
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
       </div>
 
       <div className={styles.actionsCol}>

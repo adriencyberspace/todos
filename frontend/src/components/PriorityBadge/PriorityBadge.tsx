@@ -3,11 +3,12 @@ import styles from './PriorityBadge.module.scss';
 
 interface Props {
   priority: Priority;
+  full?: boolean;
 }
 
-export function PriorityBadge({ priority }: Props) {
+export function PriorityBadge({ priority, full }: Props) {
   return (
-    <span className={styles.badge} data-priority={priority}>
+    <span className={`${styles.badge} ${full ? styles.full : ''}`} data-priority={priority}>
       {priority}
     </span>
   );

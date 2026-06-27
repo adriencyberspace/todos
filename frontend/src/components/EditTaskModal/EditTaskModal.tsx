@@ -145,7 +145,7 @@ export function EditTaskModal({ todo, onClose, onDelete }: Props) {
                   onClick={() => setPriority(p)}
                   aria-pressed={priority === p}
                 >
-                  <PriorityBadge priority={p} />
+                  <PriorityBadge priority={p} full />
                 </button>
               ))}
             </div>

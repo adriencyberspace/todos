@@ -129,18 +129,142 @@
   padding: 0 8px;
 }
 
+.dateTrigger {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
 .dueDate {
   font-size: $text-base;
   color: $text-secondary;
   white-space: nowrap;
+  cursor: pointer;
+  border-radius: $radius-sm;
+  padding: 2px 4px;
+  margin: -2px -4px;
+  transition: background $duration-fast, color $duration-fast;
+
+  &:hover {
+    background: $surface-hover;
+    color: $text-primary;
+  }
+}
+
+.dueDateEmpty {
+  color: transparent;
+  transition: color $duration-base;
+
+  .row:hover & {
+    color: $text-white-20;
+  }
+
+  &:hover {
+    color: $text-secondary !important;
+  }
 }
 
 .overdue {
   color: $overdue;
 }
 
+.calendarPopover {
+  position: absolute;
+  top: calc(100% + 4px);
+  right: 0;
+  z-index: $z-dropdown;
+  background: $bg-secondary;
+  border: 1px solid $border;
+  border-radius: $radius-lg;
+  padding: 8px;
+  box-shadow: 0 8px 32px $shadow;
+
+  :global(.rdp-root) {
+    --rdp-accent-color: #{$rust};
+    --rdp-accent-background-color: #{rgba($rust, 0.15)};
+    --rdp-today-color: #{$rust};
+    --rdp-day_button-border-radius: #{$radius-md};
+    --rdp-selected-border: none;
+  }
+
+  :global(.rdp-selected) {
+    font-weight: inherit;
+    font-size: inherit;
+  }
+
+  :global(.rdp-selected .rdp-day_button) {
+    background: $rust;
+    color: $cream;
+    border-radius: $radius-md;
+  }
+}
+
+.clearDate {
+  display: block;
+  width: 100%;
+  padding: 6px 8px;
+  font-size: $text-sm;
+  color: $text-secondary;
+  text-align: center;
+  border-top: 1px solid $border;
+  margin-top: 4px;
+
+  &:hover {
+    color: $text-primary;
+  }
+}
+
 .priorityCol {
   padding: 0 8px;
+}
+
+.priorityTrigger {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.priorityBadgeBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: $radius-pill;
+  transition: opacity $duration-fast;
+
+  &:hover {
+    opacity: 0.75;
+  }
+}
+
+.priorityPopover {
+  position: absolute;
+  top: calc(100% + 4px);
+  right: 0;
+  z-index: $z-dropdown;
+  background: $bg-secondary;
+  border: 1px solid $border;
+  border-radius: $radius-lg;
+  padding: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  box-shadow: 0 8px 32px $shadow;
+}
+
+.priorityOption {
+  padding: 4px 10px;
+  border-radius: $radius-md;
+  font-size: $text-sm;
+  transition: background $duration-fast;
+  white-space: nowrap;
+
+  &:hover {
+    background: $surface-hover;
+  }
+
+  &[data-active='true'] {
+    background: $surface-subtle;
+  }
 }
 
 .actionsCol {

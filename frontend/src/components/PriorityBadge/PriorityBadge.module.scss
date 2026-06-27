@@ -23,7 +23,7 @@
 }
 
 @media (max-width: #{$breakpoint-mobile}) {
-  .badge {
+  .badge:not(.full) {
     width: 10px;
     height: 10px;
     border-radius: 50%;
