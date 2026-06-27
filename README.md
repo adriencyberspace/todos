@@ -34,11 +34,12 @@ No database setup needed - SQLite is created automatically on first run.
 ## Features
 
 - Create, edit, and delete tasks
-- Inline creation and editing of task title and description
+- Inline editing of all task fields or edit all in modal
+- Humanized dates (i.e. Today, Tomorrow, Wednesday for the coming week instead of dates)
 - Set priority (low / medium / high) and due date
 - Mark tasks complete
 - Filter by status and priority
-- Sort by any column
+- Sort by any column, ascending or descending
 - Undo delete (4-second window via toast notification)
 - Interactive API explorer at `/api-doc`
 
